@@ -1,0 +1,61 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
+!packages/build/
+
+# Test results
+TestResults/
+
+# Publish output
+publish/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Dotnet tools
+.dotnet/
+
+# Local environment files
+.env
+.env.*
+
+# SQLite databases
+*.db
+*.sqlite
+
+# Temporary files
+*.tmp
+*.temp
