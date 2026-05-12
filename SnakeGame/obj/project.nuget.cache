@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "DfukV28AQ3s=",
+  "success": true,
+  "projectFilePath": "/Users/niteshraya/RiderProjects/SnakeGame/SnakeGame/SnakeGame.csproj",
+  "expectedPackageFiles": [
+    "/Users/niteshraya/.nuget/packages/raylib-cs/7.0.2/raylib-cs.7.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
