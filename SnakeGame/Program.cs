@@ -1,24 +1,24 @@
-﻿using Raylib_cs;
+﻿using System.Diagnostics;
+using Raylib_cs;
 using SnakeGame;
 using static Raylib_cs.Raylib;
 
 
 const int windowWidth = 800;
 const int windowHeight = 600;
-const int snakeSize = 5; // both X and Y as 50 for now
+const int snakeSize = 30; // both X and Y as 50 for now
 int snakeX = 0;
 int snakeY = 0;
 
 InitWindow(windowWidth, windowHeight, "SnakeGame");
 SetTargetFPS(60);
 
-//var snake = new Snake(snakeSize, snakeX, snakeY, windowWidth, windowHeight);
-//var food = new Food(windowWidth, windowHeight, snakeSize);
-
 var game = new Game(windowWidth, windowHeight, snakeSize);
+Stopwatch stopwatch = Stopwatch.StartNew();
 
 while (!WindowShouldClose())
 {
+    double deltaTime = stopwatch.Elapsed.TotalMilliseconds;
     // 1. INPUT
     if (IsKeyPressed(KeyboardKey.D))
         game.ChangeDirection(Snake.SnakeDirection.Right);
@@ -33,16 +33,16 @@ while (!WindowShouldClose())
         game.ChangeDirection(Snake.SnakeDirection.Up);
 
     // 2. UPDATE
-    game.Update();
+    game.Update(deltaTime);
 
     // 3. DRAW
     BeginDrawing();
     ClearBackground(Color.Black);
 
-    DrawGameWindow.DrawGameBackground(windowWidth, windowHeight, snakeSize);
+    //DrawGameWindow.DrawGameBackground(windowWidth, windowHeight, snakeSize);
 
     game.Draw();
-
+    stopwatch.Restart();
     EndDrawing();
 }
 

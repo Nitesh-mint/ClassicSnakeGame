@@ -3,6 +3,12 @@ using static Raylib_cs.Raylib;
 namespace SnakeGame;
 
 
+public class SnakeSegment(int x, int y)
+{
+    public int X { get; set; } = x;
+    public int Y { get; set; } = y;
+}
+
 public class Snake
 {
     public enum SnakeDirection
@@ -16,32 +22,40 @@ public class Snake
     private readonly int _snakeSize;
     private readonly int _windowWidth;
     private readonly int _windowHeight;
-    public int _snakeX;
-    public int _snakeY;
     private int _direction;
     private int _speed;
+    private double _timeSinceLastMove;
+    private const double MoveInterval = 150; // milliseconds between moves
+    private List<SnakeSegment> _snakeSegments;
+    public int _snakeX => _snakeSegments[0].X;
+    public int _snakeY => _snakeSegments[0].Y;
+    
     
     public Snake(int initialSize, int initialX, int initialY, int windowWidth, int windowHeight)
     {
         _snakeSize = initialSize;
-        _snakeX = initialX;
-        _snakeY = initialY;
         _windowWidth = windowWidth;
         _windowHeight = windowHeight;
         _direction = (int)SnakeDirection.Right;
         _speed = 5;
+        _snakeSegments = new List<SnakeSegment>
+        {
+            new SnakeSegment(initialX, initialY),
+        };
     }
 
     public void DrawSnake()
     {
-        DrawRectangle(_snakeX,_snakeY,_snakeSize,_snakeSize, Color.White);
+        foreach (var segment in _snakeSegments)
+        {
+            DrawRectangle(segment.X,segment.Y,_snakeSize,_snakeSize, Color.White);
+        }
     }
 
     public void GrowSnakeSize()
     {
-        // Should work on both x and y axis.
-        // The snake can possibly head toward 2 possible direction X and Y.
-        Console.WriteLine("GrowSnake");
+        var tail = _snakeSegments[^1]; // last segment
+        _snakeSegments.Add(new SnakeSegment(tail.X, tail.Y));
     }
 
     public void MoveSnake(SnakeDirection snakeDirection)
@@ -65,42 +79,35 @@ public class Snake
         }
     }
     
-    public void Update()
+    public void Update(double deltaTime)
     {
+        _timeSinceLastMove += deltaTime;
+
+        if (_timeSinceLastMove < MoveInterval)
+        {
+            return;
+        }
+        
+        _timeSinceLastMove -= MoveInterval;
+        
+        int newX = _snakeSegments[0].X;
+        int newY = _snakeSegments[0].Y;
+        
         switch (_direction)
         {
-            case (int)SnakeDirection.Right:
-                if (_snakeX >= _windowWidth - _snakeSize)
-                {
-                    break;
-                }
-                _snakeX += _snakeSize;
-                break;
-
-            case (int)SnakeDirection.Left:
-                if (_snakeX <= 0)
-                {
-                    break;
-                }
-                _snakeX -= _snakeSize;
-                break;
-
-            case (int)SnakeDirection.Up:
-                if (_snakeY <= 0)
-                {
-                    break;
-                }
-                _snakeY -= _snakeSize;
-                break;
-
-            case (int)SnakeDirection.Down:
-                if (_snakeY >= _windowHeight - _snakeSize)
-                {
-                    break;
-                }
-                _snakeY += _snakeSize;
-                break;
+            case (int)SnakeDirection.Right: newX += _snakeSize; break;
+            case (int)SnakeDirection.Left:  newX -= _snakeSize; break;
+            case (int)SnakeDirection.Up:    newY -= _snakeSize; break;
+            case (int)SnakeDirection.Down:  newY += _snakeSize; break;
         }
+        
+        for (int i = _snakeSegments.Count - 1; i > 0; i--)
+        {
+            _snakeSegments[i].X = _snakeSegments[i - 1].X;
+            _snakeSegments[i].Y = _snakeSegments[i - 1].Y;
+        }
+        _snakeSegments[0].X = newX;
+        _snakeSegments[0].Y = newY;
     }
 
     public void ChangeSnakeDirection(SnakeDirection snakeDirection)
@@ -117,7 +124,7 @@ public class Snake
         {
             return;
         }
-        _snakeX += 50;
+        //_snakeX += 50;
     }
     private void MoveLeft()
     {
@@ -126,7 +133,7 @@ public class Snake
         {
             return;
         }
-        _snakeX -= 50;
+        //_snakeX -= 50;
     }
     private void MoveDown()
     {
@@ -135,7 +142,7 @@ public class Snake
         {
             return;
         }
-        _snakeY += 50;
+        //_snakeY += 50;
     }
     private void MoveUp()
     {
@@ -144,7 +151,7 @@ public class Snake
         {
             return;
         }
-        _snakeY -= 50;
+        //_snakeY -= 50;
     }
 
     #endregion

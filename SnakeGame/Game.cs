@@ -1,19 +1,19 @@
 namespace SnakeGame;
 
-public class Game
+public class Game(int width, int height, int snakeSize)
 {
-    public Snake _snake;
-    public Food _food;
+    private readonly Snake _snake = new Snake(snakeSize, 0, 0 , width, height);
+    private readonly Food _food = new Food(width, height, snakeSize);
     
-    public Game(int width, int height, int snakeSize)
-    {
-        _snake = new Snake(snakeSize, 0, 0 , width, height);
-        _food = new Food(width, height, snakeSize);
-    }
+    //public Game(int width, int height, int snakeSize)
+    //{
+     //   _snake = new Snake(snakeSize, 0, 0 , width, height);
+      //  _food = new Food(width, height, snakeSize);
+    //}
 
-    public void Update()
+    public void Update(double deltaTime)
     {
-        _snake.Update();
+        _snake.Update(deltaTime);
         CheckCollision();
     }
 
@@ -23,6 +23,7 @@ public class Game
             _snake._snakeY == _food._foodY)
         {
             Console.WriteLine("Collision");
+            _snake.GrowSnakeSize();
             _food.Respawn();
         }
     }
