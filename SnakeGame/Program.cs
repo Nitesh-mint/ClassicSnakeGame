@@ -21,6 +21,7 @@ while (!WindowShouldClose())
 
     if (IsKeyPressed(KeyboardKey.Enter))
     {
+        Console.WriteLine("Enter Pressed!");
         game.StartGame();
     }
     

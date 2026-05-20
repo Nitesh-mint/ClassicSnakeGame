@@ -30,6 +30,6 @@ public class GameScore
 
     public void DrawHomeScreen()
     {
-        DrawText("Press Enter to start the game...", _X / 2, _Y / 2, 20, Color.Green);
+        DrawText("Press Enter to start the game...", _X - 600, _Y / 2, 20, Color.Green);
     }
 }

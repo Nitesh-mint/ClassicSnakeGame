@@ -24,7 +24,7 @@ public class Snake
     private int _speed;
     private double _timeSinceLastMove;
     private const double MoveInterval = 150; // milliseconds between moves
-    private List<SnakeSegment> _snakeSegments;
+    private readonly List<SnakeSegment> _snakeSegments;
     public int _snakeX => _snakeSegments[0].X;
     public int _snakeY => _snakeSegments[0].Y;
 
@@ -34,10 +34,10 @@ public class Snake
         _snakeSize = initialSize;
         _direction = (int)SnakeDirection.Right;
         _speed = 5;
-        _snakeSegments = new List<SnakeSegment>
-        {
-            new SnakeSegment(initialX, initialY),
-        };
+        _snakeSegments =
+        [
+            new SnakeSegment(initialX, initialY)
+        ];
     }
 
     public void DrawSnake()

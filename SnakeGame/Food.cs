@@ -10,7 +10,7 @@ public class Food
     public int _foodX;
     public int _foodY;
     
-    private readonly Random _random = new Random();
+    private readonly Random _random = new();
     
     public Food(int windowWidth, int windowHeight, int foodSize)
     {
