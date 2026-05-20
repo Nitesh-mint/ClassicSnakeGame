@@ -20,8 +20,6 @@ public class Snake
     }
     
     private readonly int _snakeSize;
-    private readonly int _windowWidth;
-    private readonly int _windowHeight;
     private int _direction;
     private int _speed;
     private double _timeSinceLastMove;
@@ -29,13 +27,11 @@ public class Snake
     private List<SnakeSegment> _snakeSegments;
     public int _snakeX => _snakeSegments[0].X;
     public int _snakeY => _snakeSegments[0].Y;
+
     
-    
-    public Snake(int initialSize, int initialX, int initialY, int windowWidth, int windowHeight)
+    public Snake(int initialSize, int initialX, int initialY)
     {
         _snakeSize = initialSize;
-        _windowWidth = windowWidth;
-        _windowHeight = windowHeight;
         _direction = (int)SnakeDirection.Right;
         _speed = 5;
         _snakeSegments = new List<SnakeSegment>
@@ -56,27 +52,6 @@ public class Snake
     {
         var tail = _snakeSegments[^1]; // last segment
         _snakeSegments.Add(new SnakeSegment(tail.X, tail.Y));
-    }
-
-    public void MoveSnake(SnakeDirection snakeDirection)
-    {
-        int direction = (int)snakeDirection;
-        
-        switch (direction)
-        {
-            case  (int)SnakeDirection.Right:
-                MoveRight();
-                break;
-            case  (int)SnakeDirection.Left:
-                MoveLeft();
-                break;
-            case  (int)SnakeDirection.Up:
-                MoveUp();
-                break;
-            case  (int)SnakeDirection.Down:
-                MoveDown();
-                break;
-        }
     }
     
     public void Update(double deltaTime)
@@ -114,45 +89,4 @@ public class Snake
     {
         _direction = (int)snakeDirection;
     }
-
-    #region snakeMovement
-
-    private void MoveRight()
-    {
-        _direction = (int)SnakeDirection.Right;
-        if (_snakeX >= _windowWidth - 50)
-        {
-            return;
-        }
-        //_snakeX += 50;
-    }
-    private void MoveLeft()
-    {
-        _direction = (int)SnakeDirection.Left;
-        if (_snakeX <= 0)
-        {
-            return;
-        }
-        //_snakeX -= 50;
-    }
-    private void MoveDown()
-    {
-        _direction = (int)SnakeDirection.Down;
-        if (_snakeY >= _windowHeight - 50)
-        {
-            return;
-        }
-        //_snakeY += 50;
-    }
-    private void MoveUp()
-    {
-        _direction = (int)SnakeDirection.Up;
-        if (_snakeY <= 0)
-        {
-            return;
-        }
-        //_snakeY -= 50;
-    }
-
-    #endregion
 }

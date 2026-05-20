@@ -18,6 +18,12 @@ Stopwatch stopwatch = Stopwatch.StartNew();
 
 while (!WindowShouldClose())
 {
+
+    if (IsKeyPressed(KeyboardKey.Enter))
+    {
+        game.StartGame();
+    }
+    
     double deltaTime = stopwatch.Elapsed.TotalMilliseconds;
     // 1. INPUT
     if (IsKeyPressed(KeyboardKey.D))
@@ -40,7 +46,6 @@ while (!WindowShouldClose())
     ClearBackground(Color.Black);
 
     //DrawGameWindow.DrawGameBackground(windowWidth, windowHeight, snakeSize);
-
     game.Draw();
     stopwatch.Restart();
     EndDrawing();
