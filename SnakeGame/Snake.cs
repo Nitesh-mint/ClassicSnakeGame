@@ -18,17 +18,17 @@ public class Snake
         Up,
         Down
     }
-    
+
     private readonly int _snakeSize;
     private int _direction;
     private int _speed;
     private double _timeSinceLastMove;
     private const double MoveInterval = 150; // milliseconds between moves
-    private readonly List<SnakeSegment> _snakeSegments;
+    private List<SnakeSegment> _snakeSegments;
     public int _snakeX => _snakeSegments[0].X;
     public int _snakeY => _snakeSegments[0].Y;
 
-    
+
     public Snake(int initialSize, int initialX, int initialY)
     {
         _snakeSize = initialSize;
@@ -44,7 +44,7 @@ public class Snake
     {
         foreach (var segment in _snakeSegments)
         {
-            DrawRectangle(segment.X,segment.Y,_snakeSize,_snakeSize, Color.White);
+            DrawRectangle(segment.X, segment.Y, _snakeSize, _snakeSize, Color.White);
         }
     }
 
@@ -53,29 +53,29 @@ public class Snake
         var tail = _snakeSegments[^1]; // last segment
         _snakeSegments.Add(new SnakeSegment(tail.X, tail.Y));
     }
-    
-    public void Update(double deltaTime)
+
+    public bool Update(double deltaTime)
     {
         _timeSinceLastMove += deltaTime;
 
         if (_timeSinceLastMove < MoveInterval)
         {
-            return;
+            return false;
         }
-        
+
         _timeSinceLastMove -= MoveInterval;
-        
+
         int newX = _snakeSegments[0].X;
         int newY = _snakeSegments[0].Y;
-        
+
         switch (_direction)
         {
             case (int)SnakeDirection.Right: newX += _snakeSize; break;
-            case (int)SnakeDirection.Left:  newX -= _snakeSize; break;
-            case (int)SnakeDirection.Up:    newY -= _snakeSize; break;
-            case (int)SnakeDirection.Down:  newY += _snakeSize; break;
+            case (int)SnakeDirection.Left: newX -= _snakeSize; break;
+            case (int)SnakeDirection.Up: newY -= _snakeSize; break;
+            case (int)SnakeDirection.Down: newY += _snakeSize; break;
         }
-        
+
         for (int i = _snakeSegments.Count - 1; i > 0; i--)
         {
             _snakeSegments[i].X = _snakeSegments[i - 1].X;
@@ -83,10 +83,37 @@ public class Snake
         }
         _snakeSegments[0].X = newX;
         _snakeSegments[0].Y = newY;
+
+        return true;
     }
 
     public void ChangeSnakeDirection(SnakeDirection snakeDirection)
     {
         _direction = (int)snakeDirection;
+    }
+
+    public void ResetSnake()
+    {
+        _snakeSegments = [
+            new SnakeSegment(0,0)
+        ];
+        _direction = (int)SnakeDirection.Right;
+
+    }
+
+    public bool HasCollidedWithSelf()
+    {
+        SnakeSegment head = _snakeSegments[0];
+
+        foreach (SnakeSegment body in _snakeSegments.Skip(1))
+        {
+            if (head.X == body.X && head.Y == body.Y)
+            {
+                Console.WriteLine("Snake Collided With Self");
+                return true;
+            }
+        }
+
+        return false;
     }
 }

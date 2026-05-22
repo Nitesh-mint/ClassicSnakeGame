@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using Raylib_cs;
+﻿using Raylib_cs;
 using SnakeGame;
+using System.Diagnostics;
 using static Raylib_cs.Raylib;
 
 
@@ -21,10 +21,9 @@ while (!WindowShouldClose())
 
     if (IsKeyPressed(KeyboardKey.Enter))
     {
-        Console.WriteLine("Enter Pressed!");
         game.StartGame();
     }
-    
+
     double deltaTime = stopwatch.Elapsed.TotalMilliseconds;
     // 1. INPUT
     if (IsKeyPressed(KeyboardKey.D))

@@ -33,6 +33,11 @@ public class Game(int width, int height, int snakeSize)
                 _gameState = (int)GameState.Gameover;
             }
 
+            if (_snake.HasCollidedWithSelf())
+            {
+                _gameState = (int)GameState.Gameover;
+            }
+
             if (_snake._snakeX == _food._foodX &&
                 _snake._snakeY == _food._foodY)
             {
@@ -74,6 +79,16 @@ public class Game(int width, int height, int snakeSize)
 
     public void StartGame()
     {
+        if (_gameState == (int)GameState.Gameover)
+        {
+            Reset();
+        }
         _gameState = (int)GameState.PLAYING;
+    }
+    public void Reset()
+    {
+        _snake.ResetSnake();
+        _gameScore.ResetScore();
+        _food.Respawn();
     }
 }

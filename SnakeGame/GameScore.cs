@@ -15,9 +15,9 @@ public class GameScore
     public void DrawGameScore()
     {
         DrawFPS(_X - 80, 10);
-        DrawText("score:" + _score, 10,10,20, Color.White);
+        DrawText("score:" + _score, 10, 10, 20, Color.White);
     }
-    
+
     public void IncreaseScore()
     {
         _score++;
@@ -25,11 +25,17 @@ public class GameScore
 
     public void DrawGameOver()
     {
-        DrawText("Game Over", _X / 2, _Y/2, 20, Color.Red);
+        DrawText("Game Over", _X / 2 - 50, _Y / 2, 20, Color.Red);
+        DrawText("Press Enter to restart the game...", _X / 2 - 100, _Y / 2 + 30, 15, Color.White);
     }
 
     public void DrawHomeScreen()
     {
         DrawText("Press Enter to start the game...", _X - 600, _Y / 2, 20, Color.Green);
+    }
+
+    public void ResetScore()
+    {
+        _score = 0;
     }
 }
