@@ -7,8 +7,6 @@ using static Raylib_cs.Raylib;
 const int windowWidth = 800;
 const int windowHeight = 600;
 const int snakeSize = 30; // both X and Y as 50 for now
-int snakeX = 0;
-int snakeY = 0;
 
 InitWindow(windowWidth, windowHeight, "SnakeGame");
 SetTargetFPS(60);
@@ -45,7 +43,6 @@ while (!WindowShouldClose())
     BeginDrawing();
     ClearBackground(Color.Black);
 
-    //DrawGameWindow.DrawGameBackground(windowWidth, windowHeight, snakeSize);
     game.Draw();
     stopwatch.Restart();
     EndDrawing();

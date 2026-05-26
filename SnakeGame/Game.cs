@@ -35,6 +35,7 @@ public class Game(int width, int height, int snakeSize)
 
             if (_snake.HasCollidedWithSelf())
             {
+                Console.WriteLine("Snake Collided with self");
                 _gameState = (int)GameState.Gameover;
             }
 

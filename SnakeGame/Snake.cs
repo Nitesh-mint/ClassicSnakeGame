@@ -103,14 +103,17 @@ public class Snake
 
     public bool HasCollidedWithSelf()
     {
-        SnakeSegment head = _snakeSegments[0];
-
-        foreach (SnakeSegment body in _snakeSegments.Skip(1))
+        if (_snakeSegments.Count > 4)
         {
-            if (head.X == body.X && head.Y == body.Y)
+
+            SnakeSegment head = _snakeSegments[0];
+            foreach (SnakeSegment body in _snakeSegments.Skip(1))
             {
-                Console.WriteLine("Snake Collided With Self");
-                return true;
+                if (head.X == body.X && head.Y == body.Y)
+                {
+                    Console.WriteLine("Snake Collided With Self");
+                    return true;
+                }
             }
         }
 
