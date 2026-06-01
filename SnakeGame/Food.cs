@@ -1,5 +1,5 @@
 using Raylib_cs;
-using static Raylib_cs.Raylib;
+
 namespace SnakeGame;
 
 public class Food
@@ -9,16 +9,22 @@ public class Food
     private readonly int _foodSize;
     public int _foodX;
     public int _foodY;
-    
+    private Texture2D _food;
+
     private readonly Random _random = new();
-    
+
     public Food(int windowWidth, int windowHeight, int foodSize)
     {
         _windowWidth = windowWidth;
         _windowHeight = windowHeight;
         _foodSize = foodSize;
-        
+
         Respawn();
+    }
+
+    public void LoadTexture()
+    {
+        _food = Raylib.LoadTexture("Graphics/apple.png");
     }
 
     public void Respawn()
@@ -29,6 +35,11 @@ public class Food
 
     public void Draw()
     {
-        DrawRectangle(_foodX,_foodY, _foodSize, _foodSize, Color.Green);       
+        Raylib.DrawTexture(_food, _foodX, _foodY, Color.Green);
+    }
+
+    public void UnloadTextures()
+    {
+        Raylib.UnloadTexture(_food);
     }
 }

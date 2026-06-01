@@ -1,5 +1,6 @@
 using Raylib_cs;
 using static Raylib_cs.Raylib;
+
 namespace SnakeGame;
 
 public class GameScore
@@ -7,11 +8,14 @@ public class GameScore
     private int _score = 0;
     private int _X;
     private int _Y;
+    private Texture2D _snakeField;
+
     public GameScore(int X, int Y)
     {
         _X = X;
         _Y = Y;
     }
+
     public void DrawGameScore()
     {
         DrawFPS(_X - 80, 10);
@@ -38,4 +42,20 @@ public class GameScore
     {
         _score = 0;
     }
+
+    public void LoadTexture()
+    {
+        _snakeField = Raylib.LoadTexture("Graphics/grass.png");
+    }
+
+    public void DrawGrassBackground()
+    {
+        Raylib.DrawTexture(_snakeField, 0, 0, Color.White);
+    }
+
+    public void UnloadTexture()
+    {
+        Raylib.UnloadTexture(_snakeField);
+    }
 }
+

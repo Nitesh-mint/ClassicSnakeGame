@@ -6,13 +6,27 @@ public class Game(int width, int height, int snakeSize)
     {
         START,
         PLAYING,
-        Gameover
+        Gameover,
     }
 
     private readonly Snake _snake = new Snake(snakeSize, 0, 0);
     private readonly Food _food = new Food(width, height, snakeSize);
     private readonly GameScore _gameScore = new GameScore(width, height);
     private int _gameState = (int)GameState.START;
+
+    public void LoadTextures()
+    {
+        _snake.LoadTextures();
+        _food.LoadTexture();
+        _gameScore.LoadTexture();
+    }
+
+    public void UnloadTexture()
+    {
+        _snake.UnloadTextures();
+        _food.UnloadTextures();
+        _gameScore.LoadTexture();
+    }
 
     public void Update(double deltaTime)
     {
@@ -27,20 +41,22 @@ public class Game(int width, int height, int snakeSize)
     {
         if (_gameState == (int)GameState.PLAYING)
         {
-            if (_snake._snakeX >= width - snakeSize || _snake._snakeX < 0 ||
-                _snake._snakeY >= height - snakeSize || _snake._snakeY < 0)
+            if (
+                _snake._snakeX >= width - snakeSize
+                || _snake._snakeX < 0
+                || _snake._snakeY >= height - snakeSize
+                || _snake._snakeY < 0
+            )
             {
                 _gameState = (int)GameState.Gameover;
             }
 
             if (_snake.HasCollidedWithSelf())
             {
-                Console.WriteLine("Snake Collided with self");
                 _gameState = (int)GameState.Gameover;
             }
 
-            if (_snake._snakeX == _food._foodX &&
-                _snake._snakeY == _food._foodY)
+            if (_snake._snakeX == _food._foodX && _snake._snakeY == _food._foodY)
             {
                 _snake.GrowSnakeSize();
                 _food.Respawn();
@@ -70,6 +86,7 @@ public class Game(int width, int height, int snakeSize)
             _food.Draw();
             _snake.DrawSnake();
             _gameScore.DrawGameScore();
+            // _gameScore.DrawGrassBackground();
         }
 
         if (_gameState == (int)GameState.START)
@@ -86,6 +103,7 @@ public class Game(int width, int height, int snakeSize)
         }
         _gameState = (int)GameState.PLAYING;
     }
+
     public void Reset()
     {
         _snake.ResetSnake();
