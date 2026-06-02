@@ -9,7 +9,7 @@ public class Game(int width, int height, int snakeSize)
         Gameover,
     }
 
-    private readonly Snake _snake = new Snake(snakeSize, 0, 0);
+    private readonly Snake _snake = new Snake(snakeSize, 120, 120);
     private readonly Food _food = new Food(width, height, snakeSize);
     private readonly GameScore _gameScore = new GameScore(width, height);
     private int _gameState = (int)GameState.START;
@@ -25,7 +25,7 @@ public class Game(int width, int height, int snakeSize)
     {
         _snake.UnloadTextures();
         _food.UnloadTextures();
-        _gameScore.LoadTexture();
+        _gameScore.UnloadTexture();
     }
 
     public void Update(double deltaTime)
@@ -42,9 +42,9 @@ public class Game(int width, int height, int snakeSize)
         if (_gameState == (int)GameState.PLAYING)
         {
             if (
-                _snake._snakeX >= width - snakeSize
+                _snake._snakeX >= width
                 || _snake._snakeX < 0
-                || _snake._snakeY >= height - snakeSize
+                || _snake._snakeY >= height
                 || _snake._snakeY < 0
             )
             {
@@ -55,7 +55,7 @@ public class Game(int width, int height, int snakeSize)
             {
                 _gameState = (int)GameState.Gameover;
             }
-
+            // Snake eating food
             if (_snake._snakeX == _food._foodX && _snake._snakeY == _food._foodY)
             {
                 _snake.GrowSnakeSize();
@@ -86,7 +86,6 @@ public class Game(int width, int height, int snakeSize)
             _food.Draw();
             _snake.DrawSnake();
             _gameScore.DrawGameScore();
-            // _gameScore.DrawGrassBackground();
         }
 
         if (_gameState == (int)GameState.START)
@@ -109,5 +108,10 @@ public class Game(int width, int height, int snakeSize)
         _snake.ResetSnake();
         _gameScore.ResetScore();
         _food.Respawn();
+    }
+
+    public void DrawGameBackground()
+    {
+        _gameScore.DrawGrassBackground();
     }
 }

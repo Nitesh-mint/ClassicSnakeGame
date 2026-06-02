@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Raylib_cs;
 using SnakeGame;
 using static Raylib_cs.Raylib;
@@ -8,11 +8,13 @@ const int windowHeight = 600;
 const int snakeSize = 30;
 
 InitWindow(windowWidth, windowHeight, "SnakeGame");
+InitAudioDevice();
 SetTargetFPS(60);
 
 var game = new Game(windowWidth, windowHeight, snakeSize);
 game.LoadTextures();
 Stopwatch stopwatch = Stopwatch.StartNew();
+game.DrawGameBackground();
 
 while (!WindowShouldClose())
 {
@@ -39,14 +41,15 @@ while (!WindowShouldClose())
     game.Update(deltaTime);
 
     // 3. DRAW
-    BeginDrawing();
     ClearBackground(Color.Black);
 
+    game.DrawGameBackground();
     game.Draw();
     stopwatch.Restart();
     EndDrawing();
 }
 
 game.UnloadTexture();
+CloseAudioDevice();
 
 CloseWindow();

@@ -33,6 +33,10 @@ public class Snake
     private Texture2D _headUp;
     private Texture2D _bodyHorizontal;
     private Texture2D _bodyVertical;
+    private Texture2D _bodyTopLeft;
+    private Texture2D _bodyTopRight;
+    private Texture2D _bodyBottomLeft;
+    private Texture2D _bodyBottomRight;
     private Texture2D _tailRight;
     private Texture2D _tailLeft;
     private Texture2D _tailUp;
@@ -55,6 +59,10 @@ public class Snake
         _headUp = Raylib.LoadTexture("Graphics/head_up.png");
         _bodyHorizontal = Raylib.LoadTexture("Graphics/body_horizontal.png");
         _bodyVertical = Raylib.LoadTexture("Graphics/body_vertical.png");
+        _bodyTopLeft = Raylib.LoadTexture("Graphics/body_topleft.png");
+        _bodyTopRight = Raylib.LoadTexture("Graphics/body_topright.png");
+        _bodyBottomLeft = Raylib.LoadTexture("Graphics/body_bottomleft.png");
+        _bodyBottomRight = Raylib.LoadTexture("Graphics/body_bottomright.png");
         _tailRight = Raylib.LoadTexture("Graphics/tail_right.png");
         _tailLeft = Raylib.LoadTexture("Graphics/tail_left.png");
         _tailUp = Raylib.LoadTexture("Graphics/tail_up.png");
@@ -69,62 +77,98 @@ public class Snake
         Raylib.UnloadTexture(_headUp);
         Raylib.UnloadTexture(_bodyHorizontal);
         Raylib.UnloadTexture(_bodyVertical);
+        Raylib.UnloadTexture(_bodyTopLeft);
+        Raylib.UnloadTexture(_bodyTopRight);
+        Raylib.UnloadTexture(_bodyBottomLeft);
+        Raylib.UnloadTexture(_bodyBottomRight);
+        Raylib.UnloadTexture(_tailRight);
+        Raylib.UnloadTexture(_tailLeft);
+        Raylib.UnloadTexture(_tailUp);
+        Raylib.UnloadTexture(_tailDown);
     }
 
     #endregion
 
     public void DrawSnake()
     {
-        switch (_direction)
+        // 1. Draw the Head
+        var head = _snakeSegments[0];
+        Texture2D headTexture = _direction switch
         {
-            case (int)SnakeDirection.Right:
-                Raylib.DrawTexture(
-                    _headRight,
-                    _snakeSegments[0].X,
-                    _snakeSegments[0].Y,
-                    Color.White
-                );
-                // Raylib.DrawTexture(
-                //     _tailRight,
-                //     _snakeSegments[^1].X,
-                //     _snakeSegments[^1].Y,
-                //     Color.White
-                // );
-                break;
-            case (int)SnakeDirection.Left:
-                Raylib.DrawTexture(
-                    _headLeft,
-                    _snakeSegments[0].X,
-                    _snakeSegments[0].Y,
-                    Color.White
-                );
-                break;
-            case (int)SnakeDirection.Up:
-                Raylib.DrawTexture(_headUp, _snakeSegments[0].X, _snakeSegments[0].Y, Color.White);
-                break;
-            case (int)SnakeDirection.Down:
-                Raylib.DrawTexture(
-                    _headDown,
-                    _snakeSegments[0].X,
-                    _snakeSegments[0].Y,
-                    Color.White
-                );
-                break;
+            (int)SnakeDirection.Right => _headRight,
+            (int)SnakeDirection.Left => _headLeft,
+            (int)SnakeDirection.Up => _headUp,
+            (int)SnakeDirection.Down => _headDown,
+            _ => _headRight,
+        };
+        Raylib.DrawTexture(headTexture, head.X, head.Y, Color.White);
+
+        if (_snakeSegments.Count <= 1)
+        {
+            return;
         }
 
-        foreach (var segment in _snakeSegments.Skip(1))
+        // 2. Draw the Tail (the last segment)
+        var tail = _snakeSegments[^1];
+        var segmentBeforeTail = _snakeSegments[^2];
+        int tailDx = segmentBeforeTail.X - tail.X;
+        int tailDy = segmentBeforeTail.Y - tail.Y;
+
+        Texture2D tailTexture = _tailRight; // default fallback
+        if (tailDx > 0)
+            tailTexture = _tailRight;
+        else if (tailDx < 0)
+            tailTexture = _tailLeft;
+        else if (tailDy > 0)
+            tailTexture = _tailDown;
+        else if (tailDy < 0)
+            tailTexture = _tailUp;
+
+        Raylib.DrawTexture(tailTexture, tail.X, tail.Y, Color.White);
+
+        // 3. Draw the Body Segments (index 1 to Count - 2)
+        for (int i = 1; i < _snakeSegments.Count - 1; i++)
         {
-            switch (_direction)
+            var current = _snakeSegments[i];
+            var prev = _snakeSegments[i + 1]; // towards tail
+            var next = _snakeSegments[i - 1]; // towards head
+
+            int dpx = prev.X - current.X;
+            int dpy = prev.Y - current.Y;
+            int dnx = next.X - current.X;
+            int dny = next.Y - current.Y;
+
+            Texture2D bodyTexture = _bodyHorizontal; // default
+
+            if (dpx != 0 && dnx != 0) // Straight horizontal
             {
-                case (int)SnakeDirection.Right:
-                case (int)SnakeDirection.Left:
-                    Raylib.DrawTexture(_bodyHorizontal, segment.X, segment.Y, Color.White);
-                    break;
-                case (int)SnakeDirection.Up:
-                case (int)SnakeDirection.Down:
-                    Raylib.DrawTexture(_bodyVertical, segment.X, segment.Y, Color.White);
-                    break;
+                bodyTexture = _bodyHorizontal;
             }
+            else if (dpy != 0 && dny != 0) // Straight vertical
+            {
+                bodyTexture = _bodyVertical;
+            }
+            else // Corner / bend
+            {
+                if ((dpx < 0 && dny < 0) || (dnx < 0 && dpy < 0))
+                {
+                    bodyTexture = _bodyTopLeft;
+                }
+                else if ((dpx > 0 && dny < 0) || (dnx > 0 && dpy < 0))
+                {
+                    bodyTexture = _bodyTopRight;
+                }
+                else if ((dpx < 0 && dny > 0) || (dnx < 0 && dpy > 0))
+                {
+                    bodyTexture = _bodyBottomLeft;
+                }
+                else if ((dpx > 0 && dny > 0) || (dnx > 0 && dpy > 0))
+                {
+                    bodyTexture = _bodyBottomRight;
+                }
+            }
+
+            Raylib.DrawTexture(bodyTexture, current.X, current.Y, Color.White);
         }
     }
 

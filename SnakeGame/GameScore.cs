@@ -9,6 +9,7 @@ public class GameScore
     private int _X;
     private int _Y;
     private Texture2D _snakeField;
+    private Sound _eatingSound;
 
     public GameScore(int X, int Y)
     {
@@ -18,13 +19,14 @@ public class GameScore
 
     public void DrawGameScore()
     {
-        DrawFPS(_X - 80, 10);
+        DrawText($"{GetFPS()}", _X - 80, 10, 20, Color.White);
         DrawText("score:" + _score, 10, 10, 20, Color.White);
     }
 
     public void IncreaseScore()
     {
         _score++;
+        Raylib.PlaySound(_eatingSound);
     }
 
     public void DrawGameOver()
@@ -35,7 +37,7 @@ public class GameScore
 
     public void DrawHomeScreen()
     {
-        DrawText("Press Enter to start the game...", _X - 600, _Y / 2, 20, Color.Green);
+        DrawText("Press Enter to start the game...", _X - 600, _Y / 2, 20, Color.White);
     }
 
     public void ResetScore()
@@ -46,16 +48,27 @@ public class GameScore
     public void LoadTexture()
     {
         _snakeField = Raylib.LoadTexture("Graphics/grass.png");
+        _eatingSound = Raylib.LoadSound("Graphics/crunchybite.ogg");
     }
 
     public void DrawGrassBackground()
     {
-        Raylib.DrawTexture(_snakeField, 0, 0, Color.White);
+        Rectangle source = new Rectangle(0, 0, _snakeField.Width, _snakeField.Height);
+
+        Rectangle dest = new Rectangle(0, 0, GetScreenWidth(), GetScreenHeight());
+        Raylib.DrawTexturePro(
+            _snakeField,
+            source,
+            dest,
+            System.Numerics.Vector2.Zero,
+            0.0f,
+            Color.White
+        );
     }
 
     public void UnloadTexture()
     {
         Raylib.UnloadTexture(_snakeField);
+        Raylib.UnloadSound(_eatingSound);
     }
 }
-

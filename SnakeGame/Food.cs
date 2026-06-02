@@ -35,7 +35,7 @@ public class Food
 
     public void Draw()
     {
-        Raylib.DrawTexture(_food, _foodX, _foodY, Color.Green);
+        Raylib.DrawTexture(_food, _foodX, _foodY, Color.Red);
     }
 
     public void UnloadTextures()
